@@ -9,8 +9,8 @@
   "scripts": {
     "start": "sh dev.sh",
     "//dev": "dev 开头的都没有压缩代码",
-    "dev": "WATCH=true webpack --progress --config webpack.config.js",
-    "dev:nowatch": "webpack --progress --config webpack.config.js",
+    "dev": " webpack --progress --config webpack.config.js",
+    "dev:nowatch": "webpack --progress --config webpack.config.dev.js",
     "//dev:tmp": "直接打包到 tmp 文件夹",
     "dev:tmp": "WATCH=true webpack --progress --config webpack.config.dev.js",
     "build":

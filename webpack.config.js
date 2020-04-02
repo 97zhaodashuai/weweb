@@ -47,7 +47,7 @@ function getSourcePath (rPath) {
 
 module.exports = {
   entry: {
-    weweb: getSourcePath('index.js')
+    weweb2: getSourcePath('index.js')
   },
   output: {
     filename: '[name].js',
@@ -76,7 +76,9 @@ module.exports = {
           fallback: 'style-loader',
           use: {
             loader: 'css-loader',
-            options: { minimize: true }
+            options: {
+              minimize: true
+            }
           }
         })
       },

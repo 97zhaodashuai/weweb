@@ -1,27 +1,24 @@
 // index.js
 Page({
   data: {
-    nodes: [
-      {
-        name: 'div',
-        attrs: {
-          class: 'div_class',
-          style: 'line-height: 60px; color: red;'
-        },
-        children: [
-          {
-            type: 'text',
-            text: 'Hello&nbsp;World!'
-          }
-        ]
-      }
-    ]
+    nodes: [{
+      name: 'div',
+      attrs: {
+        class: 'div_class',
+        style: 'line-height: 60px; color: red;'
+      },
+      children: [{
+        type: 'text',
+        text: 'Hello&nbsp;World!'
+      }]
+    }]
   },
-  tap () {
+  tap() {
     console.log('tap')
   },
   onLoad: function (options) {
     // Do some initialize when page load.
+    a = 0;
     console.log('onLoad')
   },
   onReady: function () {

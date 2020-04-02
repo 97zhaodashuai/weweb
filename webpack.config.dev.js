@@ -1,6 +1,9 @@
 /*
  * 直接打包至 wewbTmp 目录，调试用
  */
+
+const glob = require('glob')
+
 const webpack = require('webpack')
 const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
@@ -17,27 +20,30 @@ if (showAnalysis) {
   plugins = plugins.concat([new BundleAnalyzerPlugin()])
 }
 if (isProd) {
+  console.log('isPord')
   plugins = plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
+        NODE_ENV: JSON.stringify('no')
       }
     }),
     new webpack.optimize.AggressiveMergingPlugin(), // Merge chunks
     new webpack.optimize.UglifyJsPlugin({
+      // sourceMap: true,
       compress: {
         warnings: false,
-        drop_debugger: true,
-        dead_code: true,
-        properties: true,
-        evaluate: true
+        drop_debugger: false,
+        dead_code: false,
+        properties: false,
+        evaluate: false
       },
       output: {
-        comments: false
+        comments: true
       }
     }),
     new webpack.optimize.ModuleConcatenationPlugin()
   ])
+} else {
 }
 
 function getPath (rPath) {
@@ -48,15 +54,45 @@ function getSourcePath (rPath) {
   return getPath(`./src/${rPath}`)
 }
 
+function entries (globPath) {
+  var files = glob.sync(globPath)
+  var entries = {},
+    entry,
+    dirname,
+    basename
+
+  for (var i = 0; i < files.length; i++) {
+    entry = files[i]
+    dirname = path.dirname(entry)
+    basename = path.basename(entry, '.js')
+    entries[path.join(dirname, basename)] = './' + entry
+  }
+
+  console.log(entries)
+
+  return entries
+}
+
+function getEntry () {
+  var entry = {}
+  glob.sync('./src/**/*.js').forEach(function (name) {
+    var n = name.slice(name.lastIndexOf('src/') + 3, name.length - 3)
+    // n = n.slice(0, n.lastIndexOf('.') - 1);
+    entry[n] = name
+  })
+  console.log(entry)
+  return entry
+}
+
 module.exports = {
-  entry: {
-    weweb: getSourcePath('index.js')
-  },
+  entry: entries('./src/**/*.js'),
   output: {
+    // path: getPath(DIST_PATH),
+    // publicPath: '/script/',
+    path: path.join(__dirname, 'wewebTmp', 'dist1', 'script1'),
+    publicPath: '/dist1/script1/',
     filename: '[name].js',
-    publicPath: 'script/',
-    chunkFilename: '[name].wd.chunk.js',
-    path: getPath(DIST_PATH)
+    chunkFilename: '[name].wd.chunk.js'
   },
   watch: watch,
   module: {
@@ -79,7 +115,9 @@ module.exports = {
           fallback: 'style-loader',
           use: {
             loader: 'css-loader',
-            options: { minimize: true }
+            options: {
+              minimize: true
+            }
           }
         })
       },
@@ -106,5 +144,6 @@ module.exports = {
     chunksSort: 'size',
     assetsSort: 'size'
   },
-  plugins: plugins
+  plugins: plugins,
+  devtool: 'eval-source-map'
 }

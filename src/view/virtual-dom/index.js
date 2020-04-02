@@ -12,14 +12,15 @@ window.__DOMTree__ = void 0 // 虚拟dom生成的domtree
 window.reRender = 0
 let rootNode = void 0
 
-function setGlobalPageAttr (name, value) {
+function setGlobalPageAttr(name, value) {
   window[name] = value
   window.__curPage__ = {
     name: name,
     value: value
   }
 }
-function setRootNode (value) {
+
+function setRootNode(value) {
   rootNode = value
   window.__curPage__ = {
     name: 'rootNode',
@@ -69,6 +70,7 @@ const createBodyNode = function (data) {
 }
 
 const firstTimeRender = function (event) {
+  let test = 0
   if (event.ext) {
     event.ext.enablePullUpRefresh &&
       setGlobalPageAttr('__enablePullUpRefresh__', !0)

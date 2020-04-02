@@ -1,7 +1,11 @@
 import utils from '../../common/utils'
 import PageParser from './parsePage'
-import { DOM_READY_EVENT } from './constants'
-import { triggerAnalytics } from './logReport'
+import {
+  DOM_READY_EVENT
+} from './constants'
+import {
+  triggerAnalytics
+} from './logReport'
 
 var pageStack = []
 var tabBars = [] // tab栏url列表
@@ -54,17 +58,17 @@ const pageHolder = function (pageObj) {
     throw utils.error(
       'Page 注册错误',
       'Options is not object: ' +
-        JSON.stringify(pageObj) +
-        ' in ' +
-        __wxRoute +
-        '.js'
+      JSON.stringify(pageObj) +
+      ' in ' +
+      __wxRoute +
+      '.js'
     )
     new utils.AppServiceEngineKnownError(
       'Options is not object: ' +
-        JSON.stringify(pageObj) +
-        ' in ' +
-        __wxRoute +
-        '.js'
+      JSON.stringify(pageObj) +
+      ' in ' +
+      __wxRoute +
+      '.js'
     )
   }
   utils.info('Register Page: ' + pagePath)
@@ -88,6 +92,7 @@ var pageInitData = Reporter.surroundThirdByTryCatch(function (
       }
     }
   }
+  a = 0;
   utils.publish('appDataChange', params, [webviewId])
 })
 
@@ -100,8 +105,8 @@ const pageParse = function (routePath, webviewId, params) {
     utils.warn(
       'Page route 错误',
       'Page[' +
-        routePath +
-        '] not found. May be caused by: 1. Forgot to add page route in app.json. 2. Invoking Page() in async task.'
+      routePath +
+      '] not found. May be caused by: 1. Forgot to add page route in app.json. 2. Invoking Page() in async task.'
     )
     curPageObj = {}
   }
@@ -151,20 +156,20 @@ var skipPage = function (routePath, pWebViewId, pageParams, pApiKey) {
   app.appRouteTime = Date.now()
   if (pApiKey === 'navigateTo') {
     currentPage && pageHide(currentPage)
-    pageStackObjs.hasOwnProperty(pWebViewId)
-      ? utils.error(
+    pageStackObjs.hasOwnProperty(pWebViewId) ?
+      utils.error(
         'Page route 错误(system error)',
         'navigateTo with an already exist webviewId ' + pWebViewId
-      )
-      : pageParse(routePath, pWebViewId, pageParams)
+      ) :
+      pageParse(routePath, pWebViewId, pageParams)
   } else if (pApiKey === 'redirectTo') {
     currentPage && pageUnload(currentPage)
-    pageStackObjs.hasOwnProperty(pWebViewId)
-      ? utils.error(
+    pageStackObjs.hasOwnProperty(pWebViewId) ?
+      utils.error(
         'Page route 错误(system error)',
         'redirectTo with an already exist webviewId ' + pWebViewId
-      )
-      : pageParse(routePath, pWebViewId, pageParams)
+      ) :
+      pageParse(routePath, pWebViewId, pageParams)
   } else if (pApiKey === 'navigateBack') {
     for (var isExist = !1, i = pageStack.length - 1; i >= 0; i--) {
       var pageItem = pageStack[i]
@@ -184,12 +189,12 @@ var skipPage = function (routePath, pWebViewId, pageParams, pApiKey) {
       )
   } else if (pApiKey === 'reLaunch') {
     currentPage && pageUnload(currentPage)
-    pageStackObjs.hasOwnProperty(pWebViewId)
-      ? utils.error(
+    pageStackObjs.hasOwnProperty(pWebViewId) ?
+      utils.error(
         'Page route 错误(system error)',
         'redirectTo with an already exist webviewId ' + pWebViewId
-      )
-      : pageParse(routePath, pWebViewId, pageParams)
+      ) :
+      pageParse(routePath, pWebViewId, pageParams)
   } else if (pApiKey === 'switchTab') {
     for (var onlyOnePage = !0; pageStack.length > 1;) {
       pageUnload(pageStack[pageStack.length - 1])
@@ -199,9 +204,9 @@ var skipPage = function (routePath, pWebViewId, pageParams, pApiKey) {
       currentPage = pageStack[0]
       onlyOnePage || currentPage.page.onShow()
     } else if (
-      (isTabBarsPage(pageStack[0])
-        ? onlyOnePage && pageHide(pageStack[0])
-        : pageUnload(pageStack[0]),
+      (isTabBarsPage(pageStack[0]) ?
+        onlyOnePage && pageHide(pageStack[0]) :
+        pageUnload(pageStack[0]),
         pageStackObjs.hasOwnProperty(pWebViewId))
     ) {
       var pageObj = pageStackObjs[pWebViewId].page
@@ -218,14 +223,14 @@ var skipPage = function (routePath, pWebViewId, pageParams, pApiKey) {
       pageParse(routePath, pWebViewId, pageParams)
     }
   } else {
-    pApiKey === 'appLaunch'
-      ? pageStackObjs.hasOwnProperty(pWebViewId)
-        ? utils.error(
-          'Page route 错误(system error)',
-          'appLaunch with an already exist webviewId ' + pWebViewId
-        )
-        : pageParse(routePath, pWebViewId, pageParams)
-      : utils.error(
+    pApiKey === 'appLaunch' ?
+      pageStackObjs.hasOwnProperty(pWebViewId) ?
+      utils.error(
+        'Page route 错误(system error)',
+        'appLaunch with an already exist webviewId ' + pWebViewId
+      ) :
+      pageParse(routePath, pWebViewId, pageParams) :
+      utils.error(
         'Page route 错误(system error)',
         'Illegal open type: ' + pApiKey
       )
@@ -257,16 +262,16 @@ const doWebviewEvent = function (pWebviewId, pEvent, params) {
       utils.warn(
         '事件警告',
         'Do not have ' +
-          pEvent +
-          ' handler in current page: ' +
-          pageItem.route +
-          '. Please make sure that ' +
-          pEvent +
-          ' handler has been defined in ' +
-          pageItem.route +
-          ', or ' +
-          pageItem.route +
-          ' has been added into app.json'
+        pEvent +
+        ' handler in current page: ' +
+        pageItem.route +
+        '. Please make sure that ' +
+        pEvent +
+        ' handler has been defined in ' +
+        pageItem.route +
+        ', or ' +
+        pageItem.route +
+        ' has been added into app.json'
       )
     }
   }
@@ -299,9 +304,9 @@ const invokeShareAppMessage = function (params, pWebviewId) {
     var shareObj = utils.safeInvoke.call(pageObj, eventName) || {}
     shareParams.title = shareObj.title || params.title
     shareParams.desc = shareObj.desc || params.desc
-    shareParams.path = shareObj.path
-      ? utils.addHTMLSuffix(shareObj.path)
-      : params.path
+    shareParams.path = shareObj.path ?
+      utils.addHTMLSuffix(shareObj.path) :
+      params.path
     shareParams.path.length > 0 &&
       shareParams.path[0] === '/' &&
       (shareParams.path = shareParams.path.substr(1))
@@ -316,16 +321,17 @@ const invokeShareAppMessage = function (params, pWebviewId) {
 const shareAppMessage = function (params, webviewId) {
   var shareInfo = invokeShareAppMessage(params, webviewId)
   ServiceJSBridge.invoke('shareAppMessage', shareInfo, function (res) {
-    ;/ ^shareAppMessage: ok /.test(res.errMsg) &&
-    typeof shareInfo.success === 'function'
-      ? shareInfo.success(res)
-      : /^shareAppMessage:cancel/.test(res.errMsg) &&
-        typeof shareInfo.cancel === 'function'
-        ? shareInfo.cancel(res)
-        : /^shareAppMessage:fail/.test(res.errMsg) &&
-          typeof shareInfo.fail === 'function' &&
-          shareInfo.fail(res),
-    typeof shareInfo.complete === 'function' && shareInfo.complete(res) // bug?? 原代码：shareInfo.fail && shareInfo.cancel(res)
+    ;
+    / ^shareAppMessage: ok /.test(res.errMsg) &&
+      typeof shareInfo.success === 'function' ?
+      shareInfo.success(res) :
+      /^shareAppMessage:cancel/.test(res.errMsg) &&
+      typeof shareInfo.cancel === 'function' ?
+      shareInfo.cancel(res) :
+      /^shareAppMessage:fail/.test(res.errMsg) &&
+      typeof shareInfo.fail === 'function' &&
+      shareInfo.fail(res),
+      typeof shareInfo.complete === 'function' && shareInfo.complete(res) // bug?? 原代码：shareInfo.fail && shareInfo.cancel(res)
   })
 }
 
